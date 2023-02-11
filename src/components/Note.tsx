@@ -1,12 +1,20 @@
 import { useEffect, useState } from "react";
 
-const Note = ({ description }: { description: string }) => {
+const Note = ({
+  description,
+  id,
+  isNew = false,
+}: {
+  description: string;
+  id?: number;
+  isNew?: boolean;
+}) => {
   const [note, setNote] = useState(description);
   console.log("note", note);
 
-  const saveNote = () => {
-    const save = async () => {
-      fetch("https://challenge.surfe.com/dorka/notes", {
+  const updateNote = () => {
+    const saveNewNote = async () => {
+      fetch(`https://challenge.surfe.com/dorka/notes`, {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -16,9 +24,20 @@ const Note = ({ description }: { description: string }) => {
       });
     };
 
+    const saveNote = async () => {
+      fetch(`https://challenge.surfe.com/dorka/notes/${id}`, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        method: "PUT",
+        body: JSON.stringify({ body: note }),
+      });
+    };
+
     try {
       console.log("saving note");
-      save();
+      isNew ? saveNewNote() : saveNote();
     } catch (e) {
       console.error(e);
     }
@@ -44,9 +63,9 @@ const Note = ({ description }: { description: string }) => {
         <button
           className="rounded px-5 py-2 mt-2 bg-red-500 text-wh
         "
-          onClick={() => saveNote()}
+          onClick={() => updateNote()}
         >
-          Save note
+          Update
         </button>
       </div>
     </div>
