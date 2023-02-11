@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Note from "./components/Note";
-interface INote {
+
+export interface INote {
   id?: number;
-  body: string;
+  body?: string;
   isNew?: boolean;
 }
 function App() {
@@ -14,8 +15,7 @@ function App() {
         method: "GET",
       });
       const data = await res.json();
-      console.log("data", data);
-      setNotes(data);
+      setNotes(data.reverse());
     };
 
     try {
@@ -28,19 +28,18 @@ function App() {
 
   return (
     <div className="bg-gray-900 p-5 flex gap-10 flex-wrap justify-center items-center text-white">
-      {notes.map((n) => (
-        <Note key={n.id} description={n.body} id={n.id} isNew={n.isNew} />
-      ))}
-
       <button
-        className="px-5 py-1 rounded bg-green-600 text-white"
+        className="px-5 py-1 m-5 rounded bg-green-600 text-white absolute top-0 left-0"
         onClick={() => {
-          const newNotes = [...notes, { body: "new note", isNew: true }];
+          const newNotes = [{ isNew: true }, ...notes];
           setNotes(newNotes);
         }}
       >
-        Add new note
+        +Add
       </button>
+      {notes.map((n, idx) => (
+        <Note key={idx} {...n} />
+      ))}
     </div>
   );
 }

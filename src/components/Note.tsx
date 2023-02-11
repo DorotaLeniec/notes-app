@@ -1,18 +1,9 @@
-import { ChangeEventHandler, useState } from "react";
+import { useState } from "react";
+import { INote } from "../App";
 
-const Note = ({
-  description,
-  id,
-  isNew = false,
-}: {
-  description: string;
-  id?: number;
-  isNew?: boolean;
-}) => {
-  const [note, setNote] = useState(description);
+const Note = ({ body, id, isNew = false }: INote) => {
+  const [note, setNote] = useState(body);
   const [timer, setTimer] = useState(0);
-  console.log("note", note);
-  console.log("timer", timer);
 
   const updateNote = () => {
     const saveNewNote = async () => {
@@ -47,8 +38,6 @@ const Note = ({
 
   const hangleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setNote(e.target.value);
-    console.log("handleInputChange");
-    console.log("e.value", e.target.value);
     clearTimeout(timer);
 
     const newTimer = window.setTimeout(() => {
@@ -74,15 +63,7 @@ const Note = ({
         className="mt-2 block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         placeholder="Type your curent thoughts..."
       ></textarea>
-      <div>
-        <button
-          className="rounded px-5 py-2 mt-2 bg-red-500 text-wh
-        "
-          onClick={() => updateNote()}
-        >
-          Update
-        </button>
-      </div>
+      <div></div>
     </div>
   );
 };
