@@ -29,7 +29,7 @@ function App() {
   return (
     <div className="bg-gray-900 p-5 flex gap-10 flex-wrap justify-center items-center text-white">
       {notes.map((n) => (
-        <Note description={n.body} id={n.id} isNew={n.isNew} />
+        <Note key={n.id} description={n.body} id={n.id} isNew={n.isNew} />
       ))}
 
       <button
