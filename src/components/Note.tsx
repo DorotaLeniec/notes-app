@@ -117,7 +117,7 @@ const Note = ({ body, id, isNew = false }: INote) => {
     <div
       onDrop={handleOnDrop}
       onDragOver={handleOnDragOver}
-      className="p-2 rounded-sm w-60 h-60 shadow-lg shadow-gray-600 hover:shadow-2xl hover:shadow-gray-900 bg-slate-100 text-gray-800 flex flex-col"
+      className="p-2 rounded-sm w-60 h-60 shadow-xl shadow-gray-200 hover:shadow-2xl hover:shadow-gray-300 bg-white text-gray-800 flex flex-col"
     >
       <label
         htmlFor="note"
@@ -132,7 +132,7 @@ const Note = ({ body, id, isNew = false }: INote) => {
         rows={8}
         value={note}
         onChange={hangleInputChange}
-        className="mt-2 block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        className="mt-2 block p-2 w-full text-sm text-gray-900 bg-white resize-none rounded  outline-none"
         placeholder="Type your curent thoughts..."
       />
       {/* <div className="block text-sm font-medium text-gray-900 dark:text-white">
