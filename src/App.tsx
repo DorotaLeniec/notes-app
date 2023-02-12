@@ -1,7 +1,8 @@
 import { DragEvent, useEffect, useState } from "react";
 import Note from "./components/Note";
 import { v4 as uuidv4 } from "uuid";
-import { User, USERS } from "./types";
+import { User } from "./types";
+import Notee from "./components/Notee";
 
 export interface INote {
   id?: number;
@@ -78,6 +79,12 @@ function App() {
       <div className="flex gap-10 flex-wrap w-full">
         {notes.map((n) => (
           <Note key={uuidv4()} {...n} />
+        ))}
+      </div>
+
+      <div className="flex gap-10 flex-wrap w-full bg-blue-300">
+        {notes.map((n) => (
+          <Notee key={uuidv4()} {...n} />
         ))}
       </div>
     </div>
