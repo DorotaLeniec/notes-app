@@ -13,7 +13,7 @@ function App() {
 
   useEffect(() => {
     const getNotes = async () => {
-      const res = await fetch("https://challenge.surfe.com/dorka/notes", {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/notes`, {
         method: "GET",
       });
       const data = await res.json();
@@ -21,7 +21,6 @@ function App() {
     };
 
     try {
-      console.log("getting notes");
       getNotes();
     } catch (e) {
       console.error(e);
@@ -30,11 +29,10 @@ function App() {
 
   const handleDragStart = (e: DragEvent<HTMLDivElement>, email: string) => {
     e.dataTransfer.setData("mention", email);
-    console.log("drag start e", e);
   };
 
   return (
-    <div className="bg-blue-400 p-5  text-white flex justify-between">
+    <div className="bg-blue-200 p-5 text-white flex">
       <div className="sticky top-0 h-screen">
         <button
           className="px-5 py-1 m-2 rounded bg-green-600 text-white"
@@ -45,7 +43,7 @@ function App() {
         >
           +Add
         </button>
-        <div className="text-sm  w-60 h-40 p-2 m-4  text-black flex flex-col gap-2">
+        <div className="text-sm w-60 h-40 p-2 m-4 text-black flex flex-col gap-2">
           {USERS.map((u) => {
             return (
               <div
@@ -61,7 +59,7 @@ function App() {
         </div>
       </div>
 
-      <div className="flex gap-10 flex-wrap justify-center items-center">
+      <div className="flex gap-10 flex-wrap w-full">
         {notes.map((n) => (
           <Note key={uuidv4()} {...n} />
         ))}

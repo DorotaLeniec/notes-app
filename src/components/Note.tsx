@@ -1,9 +1,13 @@
-import { useEffect, useState, DragEvent } from "react";
+import { useEffect, useState, DragEvent, useRef } from "react";
 import { INote } from "../App";
 import { User } from "../types";
 import { v4 as uuidv4 } from "uuid";
+import * as DOMPurify from "dompurify";
 
 const Note = ({ body, id, isNew = false }: INote) => {
+  const ref = useRef<HTMLTextAreaElement>(null);
+  const newNoteRef = isNew ? { ref: ref } : {};
+
   const [note, setNote] = useState(body);
   const [changed, setChanged] = useState(false);
   const [timer, setTimer] = useState(0);
@@ -13,6 +17,10 @@ const Note = ({ body, id, isNew = false }: INote) => {
   const [users, setUsers] = useState<User[]>();
 
   useEffect(() => {
+    if (isNew) ref?.current?.focus();
+  }, []);
+
+  useEffect(() => {
     if (changed) {
       const newTimer = window.setTimeout(() => {
         updateNote();
@@ -20,7 +28,6 @@ const Note = ({ body, id, isNew = false }: INote) => {
 
       setTimer(newTimer);
       return () => {
-        console.log("removin timeout");
         return clearTimeout(newTimer);
       };
     }
@@ -41,7 +48,7 @@ const Note = ({ body, id, isNew = false }: INote) => {
   const updateNote = () => {
     console.log(">>", note);
     const saveNewNote = async () => {
-      fetch(`https://challenge.surfe.com/dorka/notes`, {
+      fetch(`${process.env.REACT_APP_API_URL}/notes`, {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -52,7 +59,7 @@ const Note = ({ body, id, isNew = false }: INote) => {
     };
 
     const saveNote = async () => {
-      fetch(`https://challenge.surfe.com/dorka/notes/${id}`, {
+      fetch(`${process.env.REACT_APP_API_URL}/notes/${id}`, {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -82,14 +89,27 @@ const Note = ({ body, id, isNew = false }: INote) => {
     }
   };
 
+  // const hangleInputChange2 = (e: React.FormEvent<HTMLDivElement>) => {
+  //   console.log("on change 2", e.currentTarget.innerHTML);
+  //   setNote({ html: e.currentTarget.innerHTML });
+  //   setChanged(true);
+  //   clearTimeout(timer);
+
+  //   if (e.currentTarget.innerHTML.slice(-1) === "@") {
+  //     console.log(">> Mentioned @");
+  //     setUsingMention(true);
+  //     getUsers();
+  //   }
+  // };
+
   const handleOnDragOver = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
   };
+
   const handleOnDrop = (e: DragEvent<HTMLDivElement>) => {
     const email = e.dataTransfer.getData("mention");
-    console.log(">> Mention", email);
-    console.log(">> Drop");
-    setNote(note + " " + email);
+    const text = note ? `${note} ${email} ` : "" + ` ${email} `;
+    setNote(text);
     setChanged(true);
   };
 
@@ -107,13 +127,28 @@ const Note = ({ body, id, isNew = false }: INote) => {
       </label>
       <p className="text-gray-600 text-xs">Last updated: 18 Apr, 2023</p>
       <textarea
+        {...newNoteRef}
         id="note"
         rows={8}
         value={note}
         onChange={hangleInputChange}
-        className="mt-2 block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg  outline-none "
+        className="mt-2 block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         placeholder="Type your curent thoughts..."
-      ></textarea>
+      />
+      {/* <div className="block text-sm font-medium text-gray-900 dark:text-white">
+        Note title
+      </div>
+      <p className="text-gray-600 text-xs">Last updated: 18 Apr, 2023</p>
+      <div
+        {...newNoteRef}
+        onInput={hangleInputChange2}
+        className="mt-2 block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg h-full outline-none"
+        contentEditable="true"
+        spellCheck="false"
+        dangerouslySetInnerHTML={{
+          __html: DOMPurify.sanitize(note.html || ""),
+        }}
+      /> */}
       {usingMention ? (
         <div>
           <ul>
