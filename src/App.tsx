@@ -59,8 +59,9 @@ function App() {
         >
           +Add
         </button>
-        <div className="p-2">Recently mentioned:</div>
-        <div className="text-sm p-2 text-black flex flex-col gap-2">
+
+        <div className="text-sm p-2 mr-2 text-black bg-white first-letter:flex flex-col gap-2">
+          <span className="p-2">Recent</span>
           {commonUsers.map((u) => {
             return (
               <div
@@ -69,20 +70,20 @@ function App() {
                 onDragStart={(e) => handleDragStart(e, u.email)}
                 className="px-2 cursor-pointer rounded text-blue-600 bg-white shadow-xl shadow-gray-50 hover:shadow-2xl hover:transition"
               >
-                {u.email}
+                @{u.username}
               </div>
             );
           })}
         </div>
       </div>
 
-      <div className="flex gap-10 flex-wrap w-full">
+      {/* <div className="flex gap-10 flex-wrap w-full">
         {notes.map((n) => (
           <Note key={uuidv4()} {...n} />
         ))}
-      </div>
+      </div> */}
 
-      <div className="flex gap-10 flex-wrap w-full bg-blue-300">
+      <div className="flex gap-10 flex-wrap w-full">
         {notes.map((n) => (
           <Notee key={uuidv4()} {...n} />
         ))}
